@@ -7,7 +7,9 @@ import 'package:expenses/components/transaction_form.dart';
 import 'package:expenses/components/transaction_list.dart';
 
 import 'package:expenses/models/transaction.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 main() => runApp(ExpensesApp());
 
@@ -31,9 +33,26 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   final List<Transaction> _transactions = [];
   bool _showChart = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print(state);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance!.removeObserver(this);
+  }
 
   List<Transaction> get _recentTransactions {
     return _transactions.where((tr) {
